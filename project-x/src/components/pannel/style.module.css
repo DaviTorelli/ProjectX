@@ -1,0 +1,12 @@
+.asideItem {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0.8rem;
+    transition: 0.2s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .asideItem:hover {
+    filter: brightness(0.95);
+  }
