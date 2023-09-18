@@ -1,5 +1,8 @@
 {
-  "errors": {
-    "error": "Erro"
+  "toast": {
+    "default": "WHTSJTSAJRKSAJRKSAORASM",
+    "success": "Sucesso!",
+    "error": "Erro",
+    "guest_created_ok": "Pessoa criada com sucesso!"
   }
 }
