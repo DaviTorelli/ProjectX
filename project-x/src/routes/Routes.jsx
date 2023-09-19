@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Pannel from "src/components/pannel/Pannel";
 import CreateGuest from "src/pages/Event/Guest/CreateGuest";
+import EditGuest from "src/pages/Event/Guest/EditGuest";
 import GuestsIndex from "src/pages/Event/Guest/GuestsIndex";
 import PartiesIndex from "src/pages/Event/Party/PartiesIndex";
 import CreatePlace from "src/pages/Event/Place/CreatePlace";
@@ -46,6 +47,7 @@ export const MainRoutes = () => {
                 <Route path="/parties" element={<PartiesIndex />} />
                 <Route path="/guests" element={<GuestsIndex />} />
                 <Route path="/guests/create" element={<CreateGuest />} />
+                <Route path="/guests/edit/:id" element={<EditGuest />} />
 
                 <Route path="/places" element={<PlacesIndex />} />
                 <Route path="/places/create" element={<CreatePlace />} />
