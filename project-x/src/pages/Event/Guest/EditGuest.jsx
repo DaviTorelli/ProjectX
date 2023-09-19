@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -7,8 +7,8 @@ import { IndexHeader } from "src/components/indexes/IndexHeader";
 import { phoneMask } from "src/utils/masks";
 import FormErrorMessage from "src/components/form/FormErrorMessage";
 import { FormButtons } from "src/components/form/FormButtons";
-import { storeGuest } from "src/services/api/guestServices";
-import { useNavigate } from "react-router-dom";
+import { getGuest, updateGuest } from "src/services/api/guestServices";
+import { useNavigate, useParams } from "react-router-dom";
 import { SuccessAlert } from "src/utils/alerts/sweetalerts";
 
 const schema = yup
@@ -21,12 +21,11 @@ const schema = yup
   })
   .required();
 
-function CreateGuest() {
+function EditGuest() {
   const {
     register,
     handleSubmit,
     setValue,
-    setError,
     clearErrors,
     formState: { errors },
   } = useForm({
@@ -34,27 +33,40 @@ function CreateGuest() {
   });
 
   const navigate = useNavigate();
+  const params = useParams();
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    await getGuest(params.id).then((response) => {
+      console.log(response.guest);
+      setValue("name", response.guest.name);
+      setValue("phone", response.guest.phone);
+    });
+  };
 
   function handlePhoneChange({ value }) {
     clearErrors("phone");
     setValue("phone", phoneMask(value));
   }
 
-  const saveData = async (formData) => {
-    await storeGuest(formData).then((data) => {
+  const updateData = async (formData) => {
+    await updateGuest(params.id, formData).then((data) => {
       if (data.response == true) {
         navigate(-1);
         SuccessAlert(data);
       }
     });
   };
-  
+
   return (
     <React.Fragment>
-      <IndexHeader title={"Criar Convidado"} />
+      <IndexHeader title={"Editar Convidado"} />
       <form
         className="py-3 needs-validation"
-        onSubmit={handleSubmit(saveData)}
+        onSubmit={handleSubmit(updateData)}
         noValidate
       >
         <div className="row d-flex">
@@ -89,4 +101,4 @@ function CreateGuest() {
   );
 }
 
-export default CreateGuest;
+export default EditGuest;

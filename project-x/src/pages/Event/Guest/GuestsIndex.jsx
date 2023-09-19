@@ -1,11 +1,51 @@
-import React, { useState } from "react";
+import * as Icon from "@phosphor-icons/react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { NoDataFound } from "src/components/alerts/NoDataFound";
 import { IndexSideButton } from "src/components/buttons/IndexSideButton";
+import { DeleteIcon } from "src/components/buttons/TableIcons/DeleteIcon";
+import { EditIcon } from "src/components/buttons/TableIcons/EditIcon";
 import { IndexHeader } from "src/components/indexes/IndexHeader";
+import { destroyGuest, indexGuests } from "src/services/api/guestServices";
+import Swal from "sweetalert2";
 
 function GuestsIndex() {
-  const [guests, setGuests] = useState();
+  const [guests, setGuests] = useState([]);
+  const [deleted, setDeleted] = useState(false);
+
+  useEffect(() => {
+    getData();
+  }, [deleted]);
+
+  const getData = async () => {
+    await indexGuests().then((response) => setGuests(response.guests));
+  };
+
+  const deleteItem = async (item) => {
+    await destroyGuest(item).then((response) => {
+      setDeleted(!deleted);
+      return;
+    });
+  };
+
+  const showAlert = (item) => {
+    Swal.fire({
+      title: "Atenção",
+      text: "Deseja mesmo deletar esse usuário? Essa ação é irreversível",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Deletar",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteItem(item);
+      }
+    });
+  };
+
   return (
     <React.Fragment>
       <IndexHeader
@@ -31,24 +71,30 @@ function GuestsIndex() {
                 }}
               >
                 <div className="card-body">
-                  {guests && (
+                  {guests.length > 0 && (
                     <div className="table-responsive">
                       <table className="table table-borderless text-white mb-0">
                         <thead>
                           <tr>
-                            <th scope="col">CEP</th>
-                            <th scope="col">CIDADE</th>
-                            <th scope="col">ESTADO</th>
-                            <th scope="col">AÇÕES</th>
+                            <th scope="col">nome</th>
+                            <th scope="col">telefone</th>
+                            <th scope="col">ações</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <th scope="row">124</th>
-                            <td>city</td>
-                            <td>SP</td>
-                            <td>ICONS</td>
-                          </tr>
+                          {guests.map((item, id) => (
+                            <tr key={id}>
+                              <th scope="row">{item.name}</th>
+                              <td>{item.phone}</td>
+                              <td>
+                                <EditIcon id={item.id} />
+                                <DeleteIcon
+                                  id={item.id}
+                                  deleteItem={showAlert}
+                                />
+                              </td>
+                            </tr>
+                          ))}
                         </tbody>
                       </table>
                     </div>
