@@ -1,8 +1,9 @@
 {
-  "toast": {
-    "default": "WHTSJTSAJRKSAJRKSAORASM",
-    "success": "Sucesso!",
-    "error": "Erro",
-    "guest_created_ok": "Pessoa criada com sucesso!"
+  "error": {
+    "default": "Houve um erro inesperado, contate o responsável pelo projeto."
+  },
+  "success": {
+    "default": "Função efetuada com sucesso. Muito bem!",
+    "guest_created_ok": "Convidado criado com sucesso!"
   }
 }
